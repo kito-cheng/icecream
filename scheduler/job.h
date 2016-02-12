@@ -73,22 +73,22 @@ public:
     time_t doneTime() const;
     void setDoneTime(const time_t time);
 
-    std::string targetPlatform() const;
+    const std::string &targetPlatform() const;
     void setTargetPlatform(const std::string &platform);
 
-    std::string fileName() const;
+    const std::string &fileName() const;
     void setFileName(const std::string &fileName);
 
-    std::list<Job *> masterJobFor() const;
+    const std::list<Job *> &masterJobFor() const;
     void appendJob(Job *job);
 
     unsigned int argFlags() const;
     void setArgFlags(const unsigned int argFlags);
 
-    std::string language() const;
+    const std::string &language() const;
     void setLanguage(const std::string &language);
 
-    std::string preferredHost() const;
+    const std::string &preferredHost() const;
     void setPreferredHost(const std::string &host);
 
     int minimalHostVersion() const;

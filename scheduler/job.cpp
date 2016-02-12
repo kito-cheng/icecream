@@ -153,7 +153,7 @@ void Job::setDoneTime(const time_t time)
     m_doneTime = time;
 }
 
-std::string Job::targetPlatform() const
+const std::string &Job::targetPlatform() const
 {
     return m_targetPlatform;
 }
@@ -163,7 +163,7 @@ void Job::setTargetPlatform(const std::string &platform)
     m_targetPlatform = platform;
 }
 
-std::string Job::fileName() const
+const std::string &Job::fileName() const
 {
     return m_fileName;
 }
@@ -173,7 +173,7 @@ void Job::setFileName(const std::string &fileName)
     m_fileName = fileName;
 }
 
-std::list<Job *> Job::masterJobFor() const
+const std::list<Job *> &Job::masterJobFor() const
 {
     return m_masterJobFor;
 }
@@ -193,7 +193,7 @@ void Job::setArgFlags(const unsigned int argFlags)
     m_argFlags = argFlags;
 }
 
-std::string Job::language() const
+const std::string &Job::language() const
 {
     return m_language;
 }
@@ -203,7 +203,7 @@ void Job::setLanguage(const std::string &language)
     m_language = language;
 }
 
-std::string Job::preferredHost() const
+const std::string &Job::preferredHost() const
 {
     return m_preferredHost;
 }

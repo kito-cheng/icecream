@@ -73,7 +73,7 @@ public:
         m_compiler_name = name;
     }
 
-    std::string compilerName() const
+    const std::string &compilerName() const
     {
         return m_compiler_name;
     }
@@ -93,7 +93,7 @@ public:
         m_compiler_pathname = pathname;
     }
 
-    std::string compilerPathname() const
+    const std::string &compilerPathname() const
     {
         return m_compiler_pathname;
     }
@@ -103,7 +103,7 @@ public:
         m_environment_version = ver;
     }
 
-    std::string environmentVersion() const
+    const std::string &environmentVersion() const
     {
         return m_environment_version;
     }
@@ -124,7 +124,7 @@ public:
         m_input_file = file;
     }
 
-    std::string inputFile() const
+    const std::string &inputFile() const
     {
         return m_input_file;
     }
@@ -134,7 +134,7 @@ public:
         m_output_file = file;
     }
 
-    std::string outputFile() const
+    const std::string &outputFile() const
     {
         return m_output_file;
     }
@@ -144,7 +144,7 @@ public:
         m_working_directory = dir;
     }
 
-    std::string workingDirectory() const
+    const std::string &workingDirectory() const
     {
         return m_working_directory;
     }
@@ -164,7 +164,7 @@ public:
         m_flags.append(arg, argumentType);
     }
 
-    std::string targetPlatform() const
+    const std::string &targetPlatform() const
     {
         return m_target_platform;
     }
