@@ -184,20 +184,22 @@ static void add_job_stats(Job *job, JobDoneMsg *msg)
         }
     }
 
-    job->server()->appendCompiledJob(st);
-    job->server()->setCumCompiled(job->server()->cumCompiled() + st);
+    CompileServer *server = job->server();
+    server->appendCompiledJob(st);
+    server->setCumCompiled(job->server()->cumCompiled() + st);
 
-    if (job->server()->lastCompiledJobs().size() > 200) {
-        job->server()->setCumCompiled(job->server()->cumCompiled() - *job->server()->lastCompiledJobs().begin());
-        job->server()->popCompiledJob();
+    if (server->lastCompiledJobs().size() > 200) {
+        server->setCumCompiled(server->cumCompiled() - *server->lastCompiledJobs().begin());
+        server->popCompiledJob();
     }
 
-    job->submitter()->appendRequestedJobs(st);
-    job->submitter()->setCumRequested(job->submitter()->cumRequested() + st);
+    CompileServer *submitter = job->submitter();
+    submitter->appendRequestedJobs(st);
+    submitter->setCumRequested(job->submitter()->cumRequested() + st);
 
-    if (job->submitter()->lastRequestedJobs().size() > 200) {
-        job->submitter()->setCumRequested(job->submitter()->cumRequested() - *job->submitter()->lastRequestedJobs().begin());
-        job->submitter()->popRequestedJobs();
+    if (submitter->lastRequestedJobs().size() > 200) {
+        submitter->setCumRequested(submitter->cumRequested() - *submitter->lastRequestedJobs().begin());
+        submitter->popRequestedJobs();
     }
 
     all_job_stats.push_back(st);
