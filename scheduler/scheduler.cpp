@@ -46,6 +46,7 @@
 #include <algorithm>
 #include <cassert>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <stdio.h>
 #include <pwd.h>
@@ -288,38 +289,25 @@ static void handle_monitor_stats(CompileServer *cs, StatsMsg *m = 0)
         return;
     }
 
-    string msg;
-    char buffer[1000];
-    sprintf(buffer, "Name:%s\n", cs->nodeName().c_str());
-    msg += buffer;
-    sprintf(buffer, "IP:%s\n", cs->name.c_str());
-    msg += buffer;
-    sprintf(buffer, "MaxJobs:%d\n", cs->maxJobs());
-    msg += buffer;
-    sprintf(buffer, "NoRemote:%s\n", cs->noRemote() ? "true" : "false");
-    msg += buffer;
-    sprintf(buffer, "Platform:%s\n", cs->hostPlatform().c_str());
-    msg += buffer;
-    sprintf(buffer, "Speed:%f\n", server_speed(cs));
-    msg += buffer;
+    ostringstream msg;
+    msg << "Name:" << cs->nodeName() << "\n";
+    msg << "IP:<<" << cs->name << "\n";
+    msg << "MaxJobs:" << cs->maxJobs() << "\n";
+    msg << "NoRemote:" << (cs->noRemote() ? "true" : "false") << "\n";
+    msg << "Platform:" << cs->hostPlatform() << "\n";
+    msg << "Speed:" << server_speed(cs) << "\n";
 
     if (m) {
-        sprintf(buffer, "Load:%d\n", m->load);
-        msg += buffer;
-        sprintf(buffer, "LoadAvg1:%d\n", m->loadAvg1);
-        msg += buffer;
-        sprintf(buffer, "LoadAvg5:%d\n", m->loadAvg5);
-        msg += buffer;
-        sprintf(buffer, "LoadAvg10:%d\n", m->loadAvg10);
-        msg += buffer;
-        sprintf(buffer, "FreeMem:%d\n", m->freeMem);
-        msg += buffer;
+        msg << "Load:" << m->load << "\n";
+        msg << "LoadAvg1:" << m->loadAvg1 << "\n";
+        msg << "LoadAvg5:" << m->loadAvg5 << "\n";
+        msg << "LoadAvg10:" << m->loadAvg10 << "\n";
+        msg << "FreeMem:" << m->freeMem << "\n";
     } else {
-        sprintf(buffer, "Load:%d\n", cs->load());
-        msg += buffer;
+        msg << "Load:" << cs->load() << "\n";
     }
 
-    notify_monitors(new MonStatsMsg(cs->hostId(), msg));
+    notify_monitors(new MonStatsMsg(cs->hostId(), msg.str()));
 }
 
 static Job *create_new_job(CompileServer *submitter)
@@ -1323,8 +1311,6 @@ static bool handle_line(CompileServer *cs, Msg *_m)
         return false;
     }
 
-    char buffer[1000];
-    string line;
     list<string> l;
     split_string(m->text, " \t\n", l);
     string cmd;
@@ -1341,19 +1327,18 @@ static bool handle_line(CompileServer *cs, Msg *_m)
 
     if (cmd == "listcs") {
         for (list<CompileServer *>::iterator it = css.begin(); it != css.end(); ++it) {
-            sprintf(buffer, " (%s:%d) ", (*it)->name.c_str(), (*it)->remotePort());
-            line = " " + (*it)->nodeName() + buffer;
-            line += "[" + (*it)->hostPlatform() + "] speed=";
-            sprintf(buffer, "%.2f jobs=%d/%d load=%d", server_speed(*it),
-                    (int)(*it)->jobList().size(), (*it)->maxJobs(), (*it)->load());
-            line += buffer;
+            ostringstream line;
+            line << " " + (*it)->nodeName() + " (" << (*it)->name.c_str() << ":" << (*it)->remotePort() << ")";
+            line << "[" + (*it)->hostPlatform() + "] speed=";
+            line << server_speed(*it) << " jobs="
+                 << (*it)->jobList().size() <<"/" << (*it)->maxJobs()
+                 << " load=" << (*it)->load();
 
             if ((*it)->busyInstalling()) {
-                sprintf(buffer, " busy installing since %ld s",  time(0) - (*it)->busyInstalling());
-                line += buffer;
+                line << " busy installing since "<< time(0) - (*it)->busyInstalling() << " s";
             }
 
-            if (!cs->send_msg(TextMsg(line))) {
+            if (!cs->send_msg(TextMsg(line.str()))) {
                 return false;
             }
 
