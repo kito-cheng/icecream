@@ -193,12 +193,12 @@ void Job::setArgFlags(const unsigned int argFlags)
     m_argFlags = argFlags;
 }
 
-const std::string &Job::language() const
+CompileJob::Language Job::language() const
 {
     return m_language;
 }
 
-void Job::setLanguage(const std::string &language)
+void Job::setLanguage(CompileJob::Language language)
 {
     m_language = language;
 }

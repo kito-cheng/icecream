@@ -29,6 +29,7 @@
 #include <time.h>
 
 #include "../services/comm.h"
+#include "../services/job.h"
 
 class CompileServer;
 
@@ -85,8 +86,8 @@ public:
     unsigned int argFlags() const;
     void setArgFlags(const unsigned int argFlags);
 
-    const std::string &language() const;
-    void setLanguage(const std::string &language);
+    CompileJob::Language language() const;
+    void setLanguage(CompileJob::Language);
 
     const std::string &preferredHost() const;
     void setPreferredHost(const std::string &host);
@@ -115,7 +116,7 @@ private:
     std::string m_fileName;
     std::list<Job *> m_masterJobFor;
     unsigned int m_argFlags;
-    std::string m_language; // for debugging
+    CompileJob::Language m_language; // for debugging
     std::string m_preferredHost; // for debugging daemons
     int m_minimalHostVersion; // minimal version required for the the remote server
 };

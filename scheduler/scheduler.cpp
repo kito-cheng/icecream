@@ -382,7 +382,7 @@ static bool handle_cs_request(MsgChannel *cs, Msg *_m)
         job->setEnvironments(m->versions);
         job->setTargetPlatform(m->target);
         job->setArgFlags(m->arg_flags);
-        job->setLanguage((m->lang == CompileJob::Lang_C) ? "C" : "C++");
+        job->setLanguage(m->lang);
         job->setFileName(m->filename);
         job->setLocalClientId(m->client_id);
         job->setPreferredHost(m->preferred_host);
